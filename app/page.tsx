@@ -33,7 +33,7 @@ export default function FairGPTDashboard() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const API_BASE_URL = process.env.PUBLIC_API_URL;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
