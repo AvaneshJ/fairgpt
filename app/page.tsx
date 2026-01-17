@@ -116,6 +116,11 @@ export default function FairGPTDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: q }),
       });
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Server Error:", errorText);
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
       setResult(data);
       // 🟢 Clear search bar after text query
