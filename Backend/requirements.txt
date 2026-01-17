@@ -1,1 +1,0 @@
-fastapi, uvicorn, google-genai, python-multipart, and python-dotenv
