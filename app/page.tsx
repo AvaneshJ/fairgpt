@@ -57,11 +57,14 @@ export default function FairGPTDashboard() {
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:8000/api/verify-media", {
-        method: "POST",
-        body: formData,
-        signal: AbortSignal.timeout(45000),
-      });
+      const res = await fetch(
+        `${process.env.PUBLIC_API_URL}/api/verify-media`,
+        {
+          method: "POST",
+          body: formData,
+          signal: AbortSignal.timeout(45000),
+        }
+      );
 
       if (res.status === 429) {
         alert("Rate limit reached. Please wait 60 seconds.");
@@ -108,7 +111,7 @@ export default function FairGPTDashboard() {
     setResult(null);
     setViewMode("consensus");
     try {
-      const res = await fetch("http://localhost:8000/api/search", {
+      const res = await fetch(`${process.env.PUBLIC_API_URL}/api/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: q }),
