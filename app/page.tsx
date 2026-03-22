@@ -56,15 +56,6 @@ const features = [
   },
 ];
 
-const floatingElements = [
-  { icon: "NEW", x: "8%", y: "20%", delay: "0s", duration: "25s", size: "text-4xl" },
-  { icon: "TRUTH", x: "85%", y: "15%", delay: "3s", duration: "22s", size: "text-3xl" },
-  { icon: "VERIFIED", x: "12%", y: "70%", delay: "6s", duration: "28s", size: "text-2xl" },
-  { icon: "FAKE", x: "80%", y: "65%", delay: "2s", duration: "24s", size: "text-xl" },
-  { icon: "REAL", x: "15%", y: "45%", delay: "5s", duration: "26s", size: "text-lg" },
-  { icon: "CHECK", x: "75%", y: "40%", delay: "1s", duration: "23s", size: "text-2xl" },
-];
-
 const particles = Array.from({ length: 20 }, (_, i) => ({
   id: i,
   x: Math.random() * 100,
@@ -118,22 +109,6 @@ function FloatingParticles() {
           }}
         />
       ))}
-    </div>
-  );
-}
-
-function FloatingTextBadge({ icon, x, y, delay, duration, size }: typeof floatingElements[0]) {
-  return (
-    <div
-      className={`absolute hidden lg:flex pointer-events-none font-black ${size} text-blue-600/10 dark:text-blue-400/10 uppercase tracking-widest`}
-      style={{
-        left: x,
-        top: y,
-        animation: `badgeFloat ${duration} ease-in-out infinite`,
-        animationDelay: delay,
-      }}
-    >
-      {icon}
     </div>
   );
 }
@@ -279,10 +254,6 @@ export default function LandingPage() {
       <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20 overflow-hidden">
         <PaperPlane />
         <FloatingParticles />
-        
-        {floatingElements.map((props, i) => (
-          <FloatingTextBadge key={i} {...props} />
-        ))}
 
         <div className="absolute top-1/4 -left-32 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float-slow" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-float-slow-reverse" />
@@ -470,25 +441,6 @@ export default function LandingPage() {
       </footer>
 
       <style jsx global>{`
-        @keyframes badgeFloat {
-          0%, 100% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.08;
-          }
-          25% {
-            transform: translateY(-20px) rotate(3deg);
-            opacity: 0.12;
-          }
-          50% {
-            transform: translateY(-10px) rotate(-2deg);
-            opacity: 0.1;
-          }
-          75% {
-            transform: translateY(-25px) rotate(2deg);
-            opacity: 0.08;
-          }
-        }
-        
         @keyframes planeFly {
           0% {
             left: -200px;
