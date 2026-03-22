@@ -2,7 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth transition when switching modes */
-* {
-  @apply transition-colors duration-300;
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply antialiased;
+}
+
+a, button {
+  @apply transition-all duration-200;
 }
