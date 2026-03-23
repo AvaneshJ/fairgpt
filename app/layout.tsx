@@ -1,5 +1,10 @@
-import "./globals.css"; // 1. Import Tailwind styles
-import { ThemeProvider } from "./components/ThemeProvider"; // 2. Import your provider
+import "./globals.css";
+import { Providers } from "./components/Providers";
+
+export const metadata: Metadata = {
+  title: "TruthLens — AI News Authenticator",
+  description: "AI-powered news verification and fact-checking.",
+};
 
 export default function RootLayout({
   children,
@@ -9,8 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        {/* Everything inside these tags can now use Dark Mode! */}
-        <ThemeProvider>{children}</ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
