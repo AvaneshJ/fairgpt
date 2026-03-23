@@ -1,216 +1,278 @@
-'use client'
+"use client";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import {
+  Moon,
+  Sun,
+  ShieldCheck,
+  Zap,
+  BookOpen,
+  ArrowRight,
+  CheckCircle2,
+  FileText,
+  AlertTriangle,
+  Newspaper,
+  Sparkles,
+} from "lucide-react";
+import { useTheme } from "next-themes";
 
-import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
-import styles from './page.module.css'
-
-const PHRASES = [
-  'Verify before you testify...',
-  "Don't share what you can't verify...",
-  'The truth deserves a second look...',
-  'Real news. Verified. Every time.',
-]
-
-const FEATURES = [
+const features = [
   {
-    title: 'Analyze any headline instantly',
-    desc: 'Paste a news headline and get a Real, Fake, or Uncertain verdict with a confidence score in under 2 seconds.',
-    dir: 'right',
+    icon: ShieldCheck,
+    title: "AI-Powered Verification",
+    description:
+      "Advanced AI analyzes claims against trusted sources to determine authenticity.",
   },
   {
-    title: 'Verify URLs from any news source',
-    desc: 'Drop in a link to any article — TruthLens checks source reputation and cross-references fact-checking databases.',
-    dir: 'left',
+    icon: FileText,
+    title: "Deep Source Analysis",
+    description:
+      "Evaluates source credibility using the Golden List methodology.",
   },
   {
-    title: 'Read screenshots of news articles',
-    desc: 'Upload a screenshot from WhatsApp, Twitter, or anywhere — AI extracts and analyzes the text for you.',
-    dir: 'right',
+    icon: AlertTriangle,
+    title: "Bias Detection",
+    description:
+      "Identifies sentiment bias and presents multiple perspectives on any topic.",
   },
   {
-    title: 'Full explanation with every verdict',
-    desc: 'Every result includes signal-by-signal reasoning and suggested credible sources so you can dig deeper.',
-    dir: 'left',
+    icon: Newspaper,
+    title: "Media Verification",
+    description:
+      "Verify images and screenshots to detect manipulation or misinformation.",
   },
-]
+  {
+    icon: BookOpen,
+    title: "Temporal Tracking",
+    description:
+      "Track how stories evolve over time and see historical context.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Private & Secure",
+    description: "Your search history is encrypted and only accessible to you.",
+  },
+];
 
-function TypewriterText() {
-  const [display, setDisplay] = useState('')
-  const [phraseIdx, setPhraseIdx] = useState(0)
-  const [charIdx, setCharIdx] = useState(0)
-  const [deleting, setDeleting] = useState(false)
+const particles = Array.from({ length: 20 }, (_, i) => ({
+  id: i,
+  x: Math.random() * 100,
+  y: Math.random() * 100,
+  size: Math.random() * 4 + 2,
+  delay: `${(Math.random() * 5).toFixed(1)}s`,
+  duration: `${(Math.random() * 10 + 10).toFixed(1)}s`,
+}));
+
+function TypewriterText({
+  text,
+  delay = 100,
+}: {
+  text: string;
+  delay?: number;
+}) {
+  const [displayText, setDisplayText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
 
   useEffect(() => {
-    const phrase = PHRASES[phraseIdx]
-    let timeout: ReturnType<typeof setTimeout>
-
-    if (!deleting) {
-      if (charIdx < phrase.length) {
-        timeout = setTimeout(() => {
-          setDisplay(phrase.slice(0, charIdx + 1))
-          setCharIdx(c => c + 1)
-        }, 55)
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        setDisplayText(text.slice(0, index + 1));
+        index++;
       } else {
-        timeout = setTimeout(() => setDeleting(true), 1800)
+        setIsTyping(false);
+        clearInterval(interval);
       }
-    } else {
-      if (charIdx > 0) {
-        timeout = setTimeout(() => {
-          setDisplay(phrase.slice(0, charIdx - 1))
-          setCharIdx(c => c - 1)
-        }, 30)
-      } else {
-        setDeleting(false)
-        setPhraseIdx(i => (i + 1) % PHRASES.length)
-      }
-    }
-    return () => clearTimeout(timeout)
-  }, [charIdx, deleting, phraseIdx])
+    }, delay);
+    return () => clearInterval(interval);
+  }, [text, delay]);
 
   return (
-    <div className={styles.twWrap}>
-      <span className={styles.twText}>{display}</span>
-      <span className={styles.cursor} />
-    </div>
-  )
+    <span>
+      {displayText}
+      <span
+        className={`inline-block w-0.5 h-[0.9em] bg-blue-600 ml-1 align-middle ${isTyping ? "animate-pulse" : ""}`}
+      />
+    </span>
+  );
 }
 
-function FeatureItem({ title, desc, dir, index }: { title: string; desc: string; dir: string; index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.15 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
-
+function FloatingParticles() {
   return (
-    <div
-      ref={ref}
-      className={`${styles.featItem} ${dir === 'right' ? styles.fromRight : styles.fromLeft} ${visible ? styles.visible : ''}`}
-      style={{ transitionDelay: visible ? `${index * 0.5}s` : '0s' }}
-    >
-      <div className={styles.featBullet} />
-      <div>
-        <div className={styles.featTitle}>{title}</div>
-        <div className={styles.featDesc}>{desc}</div>
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute rounded-full bg-blue-500/30 dark:bg-blue-400/20 animate-particle"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function PaperPlane() {
+  return (
+    <div className="absolute top-1/3 left-0 w-full overflow-hidden pointer-events-none">
+      <div
+        className="absolute flex items-center gap-3 opacity-20"
+        style={{ animation: "planeFly 15s linear infinite" }}
+      >
+        <Newspaper size={24} className="text-blue-500" />
+        <div className="w-32 h-2 bg-gradient-to-r from-blue-500 to-transparent rounded-full" />
       </div>
     </div>
-  )
+  );
 }
 
-export default function HomePage() {
-  const router = useRouter()
+function BreathingTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative">
+      <div className="absolute inset-0 blur-3xl opacity-20 animate-breathe">
+        {children}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function PulsingButton({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative">
+      <div className="absolute inset-0 rounded-2xl animate-pulse-ring" />
+      <button
+        onClick={onClick}
+        className="relative px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:scale-105 active:scale-95"
+      >
+        <span className="relative z-10 flex items-center gap-2">
+          {children}
+        </span>
+      </button>
+    </div>
+  );
+}
+
+export default function LandingPage() {
+  const router = useRouter();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showButtonHint, setShowButtonHint] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowButtonHint(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleAnalyze = useCallback(() => {
+    setIsTransitioning(true);
+    setTimeout(() => router.push("/dashboard"), 800);
+  }, [router]);
+
+  if (!mounted) return null;
 
   return (
-    <div style={{width:"100%"}}>
+    <main
+      className={`min-h-screen bg-slate-50 dark:bg-[#0f172a] overflow-hidden transition-all duration-700 ${isTransitioning ? "scale-110 opacity-0 blur-xl" : "scale-100 opacity-100"}`}
+    >
+      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-6 max-w-7xl mx-auto">
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center text-white">
+            <FileText size={20} />
+          </div>
+          <span className="font-bold text-xl tracking-tight">TruthLens</span>
+        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-3 rounded-2xl bg-white dark:bg-slate-800 border"
+          >
+            {theme === "dark" ? (
+              <Sun size={18} className="text-yellow-400" />
+            ) : (
+              <Moon size={18} className="text-blue-600" />
+            )}
+          </button>
+        </div>
+      </nav>
 
-      {/* ── HERO ── */}
-      <section style={{width:"100%", background:"var(--bg-base)"}}>
-      <div className={styles.hero}>
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+        <PaperPlane />
+        <FloatingParticles />
+        <div className="relative z-10 text-center max-w-5xl mx-auto">
+          <Zap size={14} className="text-blue-600 mb-4 inline-block" />
+          <h1 className="text-5xl md:text-7xl font-black mb-6">
+            <TypewriterText text="Verify the" delay={120} />
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Unseen.
+            </span>
+          </h1>
+          <PulsingButton onClick={handleAnalyze}>
+            Analyze Now <ArrowRight size={20} />
+          </PulsingButton>
+        </div>
+      </section>
 
-        {/* Newspaper background */}
-        <div className={styles.npBg} aria-hidden>
-          {([
-            { h: 60,  head: 'World news —',           sym: '§',  symPos: { top: 4, right: 8 },  lines: ['w9','w7','w8'] },
-            { h: 55,  img: 28, head: null,             sym: '!',  symPos: { top: 4, right: 8 },  lines: ['w8','w6'] },
-            { h: 58,  head: 'Fact check —',            sym: '?',  symPos: { top: 4, right: 8 },  lines: ['w9','w5','w7'] },
-            { h: 52,  img: 24, head: null,             sym: '#',  symPos: { top: 4, right: 8 },  lines: ['w8','w9'] },
-            { h: 110, head: 'Breaking — officials warn', sym: '§', symPos: { top: 6, right: 10 }, lines: ['w9','w7','w8','w5'], byline: true },
-            { h: 130, img: 52, head: null,             sym: '©',  symPos: { bottom: 8, right: 8 }, lines: ['w8','w6'] },
-            { h: 80,  head: 'Sources say —',           sym: '?!', symPos: { top: 4, right: 10 }, lines: ['w9','w7','w8'] },
-            { h: 80,  head: null,                      sym: '#',  symPos: { top: 5, right: 8 },  lines: ['w8','w9'] },
-            { h: 140, img: 64, head: 'Study finds new —', sym: '★', symPos: { bottom: 6, left: 8 }, lines: ['w9','w7','w5'] },
-            { h: 70,  head: null,                      sym: '!',  symPos: { top: 6, right: 8 },  lines: ['w8','w9','w6'] },
-            { h: 95,  head: 'Report — experts claim',  sym: '%',  symPos: { top: 4, right: 8 },  lines: ['w9','w8','w7'] },
-            { h: 110, img: 44, head: null,             sym: '@',  symPos: { bottom: 6, right: 8 }, lines: ['w8','w6'] },
-            { h: 85,  head: 'Viral post claims —',     sym: '??', symPos: { top: 5, right: 8 },  lines: ['w9','w7','w8','w5'] },
-            { h: 150, img: 80, head: 'Officials deny —', sym: '†', symPos: { top: 6, right: 8 }, lines: ['w8','w9'] },
-            { h: 90,  head: null,                      sym: '#',  symPos: { bottom: 6, left: 8 }, lines: ['w8','w9','w6','w7'] },
-            { h: 50,  head: 'Unverified —',            sym: '!',  symPos: { top: 4, right: 8 },  lines: ['w7','w5'] },
-          ] as { h:number; img?:number; head:string|null; sym:string; symPos:React.CSSProperties; lines:string[]; byline?:boolean }[]).map((b, i) => (
-            <div key={i} className={styles.npBlock} style={{ height: b.h }}>
-              {b.img && <div className={styles.npImg} style={{ height: b.img }} />}
-              {b.head && <div className={styles.npBighead}>{b.head}</div>}
-              <div className={styles.npRule} />
-              <div className={styles.npBody}>
-                {b.lines.map((w, j) => <div key={j} className={`${styles.npLine} ${styles[w]}`} />)}
-              </div>
-              {b.byline && <div className={styles.npByline} />}
-              <span className={styles.npSym} style={b.symPos}>{b.sym}</span>
+      {/* Feature Grid Section */}
+      <section className="py-32 px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+          {features.map((feature, i) => (
+            <div
+              key={i}
+              className="p-8 bg-white dark:bg-slate-900 rounded-[32px] border"
+            >
+              <feature.icon className="mb-4 text-blue-500" />
+              <h3 className="font-bold text-xl mb-2">{feature.title}</h3>
+              <p className="text-slate-500">{feature.description}</p>
             </div>
           ))}
         </div>
-
-        <div className={styles.npFade} aria-hidden />
-        <div className={styles.heroGlow} aria-hidden />
-
-        <div className={styles.heroContent}>
-          <div className={styles.heroPill}>AI · News · Verification</div>
-          <h1 className={styles.heroTitle}>
-            Don&apos;t just read.<br />
-            <span className={styles.heroAccent}>Verify.</span>
-          </h1>
-          <TypewriterText />
-          <button className={styles.heroBtn} onClick={() => router.push('/analyze')}>
-            Start verifying
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
       </section>
 
-      <div className={styles.sectDiv} />
-
-      {/* ── FEATURES ── */}
-      <section className={styles.features}>
-        <div className={styles.bgLines} aria-hidden>
-          {[68,112,156,200,244,288,332].map(top => <div key={top} className={styles.bgLine} style={{ top }} />)}
-        </div>
-        <div className={styles.bgSymbols} aria-hidden>
-          {[
-            { t:18,l:28,v:'##' }, { t:40,r:44,v:'!' }, { t:80,l:60,v:'?' }, { t:70,r:80,v:'§' },
-            { t:130,l:32,v:'!!' }, { t:150,r:36,v:'#' }, { t:200,l:52,v:'?!' }, { t:185,r:60,v:'@' },
-            { t:240,l:24,v:'§' }, { t:255,r:42,v:'??' }, { t:290,l:66,v:'#!' }, { t:310,r:28,v:'★' },
-            { t:340,l:36,v:'!' }, { t:355,r:64,v:'%' },
-          ].map((s, i) => (
-            <span key={i} className={styles.bgSym} style={{ top: s.t, left: s.l, right: s.r } as React.CSSProperties}>{s.v}</span>
-          ))}
-        </div>
-
-        <div className={styles.featLabel}>What TruthLens does</div>
-        <div className={styles.featList}>
-          {FEATURES.map((f, i) => (
-            <FeatureItem key={i} title={f.title} desc={f.desc} dir={f.dir} index={i} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── BARE CTA ── */}
-      <section className={styles.ctaBare}>
-        <div className={styles.ctaDivider} />
-        <div className={styles.ctaQ}>Seen a suspicious headline today?</div>
-        <div className={styles.ctaRow}>
-          <span className={styles.ctaText}>
-            Don&apos;t scroll past it. <span className={styles.ctaAccent}>Verify it.</span>
-          </span>
-          <button className={styles.ctaBtn} onClick={() => router.push('/analyze')}>
-            Analyze it now
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </section>
-
-    </div>
-  )
+      <style jsx global>{`
+        @keyframes planeFly {
+          0% {
+            left: -200px;
+            opacity: 0;
+          }
+          100% {
+            left: 100%;
+            opacity: 0;
+          }
+        }
+        @keyframes particle {
+          0% {
+            transform: translateY(0);
+            opacity: 0.3;
+          }
+          100% {
+            transform: translateY(-200px);
+            opacity: 0;
+          }
+        }
+        .animate-particle {
+          animation: particle 15s infinite;
+        }
+      `}</style>
+    </main>
+  );
 }
