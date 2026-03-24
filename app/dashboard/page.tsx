@@ -275,7 +275,7 @@ export default function TruthLensDashboard() {
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 flex flex-col transition-all duration-500">
-      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-6 max-w-6xl mx-auto backdrop-blur-md">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 sm:p-6 max-w-6xl mx-auto backdrop-blur-md">
         <button
           onClick={() => {
             setResult(null);
@@ -477,7 +477,7 @@ export default function TruthLensDashboard() {
 
                     <div
                       id="truth-card-content"
-                      className="bg-white dark:bg-slate-900/60 backdrop-blur-xl rounded-[40px] border dark:border-slate-800 shadow-2xl p-8 md:p-12 relative"
+                      className="bg-white dark:bg-slate-900/60 backdrop-blur-xl rounded-[24px] sm:rounded-[40px] border dark:border-slate-800 shadow-2xl p-5 sm:p-8 md:p-12 relative"
                     >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 mt-8 md:mt-0">
                         <div className="flex items-center gap-3">
@@ -698,18 +698,18 @@ export default function TruthLensDashboard() {
       </div>
 
       <div
-        className={`fixed bottom-0 left-0 right-0 p-6 z-50 bg-gradient-to-t from-slate-50 dark:from-[#0f172a] transition-all ${
-          result || loading ? "translate-y-0" : "relative mt-12"
+        className={`fixed bottom-0 left-0 right-0 p-3 sm:p-6 z-50 bg-gradient-to-t from-slate-50 dark:from-[#0f172a] transition-all ${
+          result || loading ? "translate-y-0" : "relative mt-12 sm:mt-12"
         }`}
       >
         <div className="max-w-3xl mx-auto relative group">
           {previewUrl && (
-            <div className="absolute -top-24 left-4 animate-in fade-in slide-in-from-bottom-4">
+            <div className="absolute -top-20 sm:-top-24 left-2 sm:left-4 animate-in fade-in slide-in-from-bottom-4">
               <div className="relative group">
                 <img
                   src={previewUrl}
                   alt="Preview"
-                  className="w-20 h-20 object-cover rounded-2xl border-2 border-white dark:border-slate-800 shadow-xl"
+                  className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-2xl border-2 border-white dark:border-slate-800 shadow-xl"
                 />
                 <button
                   onClick={() => {
@@ -724,113 +724,123 @@ export default function TruthLensDashboard() {
             </div>
           )}
 
-          <div className="relative flex items-center bg-white dark:bg-slate-900 rounded-[32px] border border-slate-200 dark:border-slate-800 p-2 shadow-2xl transition-all focus-within:ring-2 focus-within:ring-blue-500/20">
-            <label className="ml-2 p-2.5 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full group transition-all">
-              <Paperclip
+          {/* 🟢 RESPONSIVE INPUT CONTAINER: Stacks on mobile, inline on desktop */}
+          <div className="relative flex flex-col sm:flex-row items-center bg-white dark:bg-slate-900 rounded-[20px] sm:rounded-[32px] border border-slate-200 dark:border-slate-800 p-2 shadow-2xl transition-all focus-within:ring-2 focus-within:ring-blue-500/20 gap-2 sm:gap-0">
+            {/* Top Row on Mobile (Attachment + Search + Input) */}
+            <div className="flex items-center w-full flex-1">
+              <label className="ml-1 p-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full group transition-all shrink-0">
+                <Paperclip
+                  size={18}
+                  className="text-slate-400 group-hover:text-blue-600 sm:w-5 sm:h-5"
+                />
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*,application/pdf"
+                  onChange={(e) => handleFileSelection(e.target.files![0])}
+                />
+              </label>
+
+              <Search
+                className="hidden sm:block ml-2 text-slate-400 shrink-0"
                 size={20}
-                className="text-slate-400 group-hover:text-blue-600"
               />
+
               <input
-                type="file"
-                className="hidden"
-                accept="image/*,application/pdf"
-                onChange={(e) => handleFileSelection(e.target.files![0])}
+                type="text"
+                className="flex-1 w-full p-2 sm:p-3 ml-1 sm:ml-2 outline-none text-[14px] sm:text-[15px] bg-transparent text-slate-800 dark:text-slate-200 placeholder:text-slate-400 min-w-0"
+                placeholder={
+                  selectedFile
+                    ? "Add text context..."
+                    : "Enter a claim or paste screenshot..."
+                }
+                value={query || ""}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                onPaste={handlePaste}
               />
-            </label>
-
-            <Search className="ml-2 text-slate-400" size={20} />
-
-            <input
-              type="text"
-              className="flex-1 w-full p-3 ml-2 outline-none text-[15px] bg-transparent text-slate-800 dark:text-slate-200 placeholder:text-slate-400"
-              placeholder={
-                selectedFile
-                  ? "Add text context to your image..."
-                  : "Enter a claim or paste screenshot..."
-              }
-              value={query || ""}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              onPaste={handlePaste}
-            />
-
-            <div className="relative flex items-center border-l border-slate-200 dark:border-slate-700 mr-2 pl-2">
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="appearance-none bg-transparent py-2 pl-3 pr-8 text-sm font-semibold text-slate-700 dark:text-slate-300 outline-none focus:ring-0 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
-              >
-                <option
-                  className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                  value="English"
-                >
-                  English
-                </option>
-                <option
-                  className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                  value="Hindi"
-                >
-                  हिंदी
-                </option>
-                <option
-                  className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                  value="Tamil"
-                >
-                  தமிழ்
-                </option>
-                <option
-                  className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                  value="Telugu"
-                >
-                  తెలుగు
-                </option>
-                <option
-                  className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                  value="Bengali"
-                >
-                  বাংলা
-                </option>
-                <option
-                  className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                  value="Marathi"
-                >
-                  मराठी
-                </option>
-                <option
-                  className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
-                  value="Gujarati"
-                >
-                  ગુજરાતી
-                </option>
-              </select>
-              <div className="absolute right-2 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-slate-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </div>
             </div>
 
-            <button
-              onClick={() => handleSearch()}
-              disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-[24px] font-bold text-sm transition-all disabled:opacity-50 active:scale-95 flex items-center justify-center min-w-[100px]"
-            >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                "Verify"
-              )}
-            </button>
+            {/* Bottom Row on Mobile (Language + Verify Button) */}
+            <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-slate-800 pt-2 sm:pt-0 sm:pl-2 px-1 sm:px-0">
+              <div className="relative flex items-center mr-2">
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="appearance-none bg-transparent py-1.5 sm:py-2 pl-2 sm:pl-3 pr-6 sm:pr-8 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 outline-none focus:ring-0 cursor-pointer hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
+                  <option
+                    className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    value="English"
+                  >
+                    English
+                  </option>
+                  <option
+                    className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    value="Hindi"
+                  >
+                    हिंदी
+                  </option>
+                  <option
+                    className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    value="Tamil"
+                  >
+                    தமிழ்
+                  </option>
+                  <option
+                    className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    value="Telugu"
+                  >
+                    తెలుగు
+                  </option>
+                  <option
+                    className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    value="Bengali"
+                  >
+                    বাংলা
+                  </option>
+                  <option
+                    className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    value="Marathi"
+                  >
+                    मराठी
+                  </option>
+                  <option
+                    className="bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200"
+                    value="Gujarati"
+                  >
+                    ગુજરાતી
+                  </option>
+                </select>
+                <div className="absolute right-1 sm:right-2 pointer-events-none">
+                  <svg
+                    className="w-3 h-3 sm:w-4 sm:h-4 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+
+              <button
+                onClick={() => handleSearch()}
+                disabled={loading}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 sm:px-8 sm:py-3.5 rounded-[12px] sm:rounded-[24px] font-bold text-xs sm:text-sm transition-all disabled:opacity-50 active:scale-95 flex items-center justify-center min-w-[80px] sm:min-w-[100px]"
+              >
+                {loading ? (
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  "Verify"
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
