@@ -16,6 +16,7 @@ TruthLens uses advanced AI to verify news claims and media content. It cross-ref
 ## Features
 
 ### Core Features
+
 - **News Verification** - Verify claims against trusted sources
 - **Media Verification** - Analyze images and screenshots for manipulation
 - **Bias Detection** - Identify sentiment bias in content
@@ -23,6 +24,7 @@ TruthLens uses advanced AI to verify news claims and media content. It cross-ref
 - **Alternative Perspectives** - View consensus vs alternative viewpoints
 
 ### User Features
+
 - **User Authentication** - Sign up, login, and logout
 - **Search History**
   - Logged-in users: History saved permanently to database
@@ -30,6 +32,7 @@ TruthLens uses advanced AI to verify news claims and media content. It cross-ref
 - **Demo Mode** - Test the app without AI API using pre-made demo cards
 
 ### UI/UX
+
 - **Dark/Light Mode** - Automatic theme switching
 - **Responsive Design** - Works on desktop, tablet, and mobile
 - **Smooth Animations** - Landing page transitions, button effects
@@ -37,15 +40,15 @@ TruthLens uses advanced AI to verify news claims and media content. It cross-ref
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | Next.js 16, React 19, TypeScript |
-| Styling | Tailwind CSS |
-| Backend | Next.js API Routes |
-| Database | PostgreSQL with Prisma ORM |
-| Auth | NextAuth.js (Credentials Provider) |
-| Icons | Lucide React |
-| Charts | Recharts |
+| Layer    | Technology                         |
+| -------- | ---------------------------------- |
+| Frontend | Next.js 16, React 19, TypeScript   |
+| Styling  | Tailwind CSS                       |
+| Backend  | Next.js API Routes                 |
+| Database | PostgreSQL with Prisma ORM         |
+| Auth     | NextAuth.js (Credentials Provider) |
+| Icons    | Lucide React                       |
+| Charts   | Recharts                           |
 
 ## Getting Started
 
@@ -120,7 +123,7 @@ truthlens/
 │   │   ├── VerificationCharts.tsx     # Source verification chart
 │   │   ├── TrendChart.tsx             # Temporal trend chart
 │   │   ├── ExampleQueryCards.tsx      # Example prompts
-│   │   └── TestDemoCards.tsx          # Demo cards (no API needed)
+│   │
 │   ├── dashboard/
 │   │   └── page.tsx                   # Main verification dashboard
 │   ├── history/
@@ -142,32 +145,35 @@ truthlens/
 
 ## Pages
 
-| Route | Description |
-|-------|-------------|
-| `/` | Landing page with features and "Analyze Now" button |
-| `/dashboard` | Main verification interface with search |
-| `/login` | User login page |
-| `/signup` | User registration page |
-| `/history` | View saved search history |
+| Route        | Description                                         |
+| ------------ | --------------------------------------------------- |
+| `/`          | Landing page with features and "Analyze Now" button |
+| `/dashboard` | Main verification interface with search             |
+| `/login`     | User login page                                     |
+| `/signup`    | User registration page                              |
+| `/history`   | View saved search history                           |
 
 ## API Endpoints
 
 ### Authentication
-| Endpoint | Method | Description |
-|----------|--------|-------------|
+
+| Endpoint                  | Method    | Description       |
+| ------------------------- | --------- | ----------------- |
 | `/api/auth/[...nextauth]` | GET, POST | NextAuth handlers |
-| `/api/auth/register` | POST | Create new user |
+| `/api/auth/register`      | POST      | Create new user   |
 
 ### History
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/history` | GET | Get user's search history |
-| `/api/history` | POST | Save search to history |
-| `/api/history` | DELETE | Delete a search |
+
+| Endpoint       | Method | Description               |
+| -------------- | ------ | ------------------------- |
+| `/api/history` | GET    | Get user's search history |
+| `/api/history` | POST   | Save search to history    |
+| `/api/history` | DELETE | Delete a search           |
 
 ## Deploying to Vercel
 
 ### 1. Push to GitHub
+
 ```bash
 git add .
 git commit -m "Your commit message"
@@ -175,6 +181,7 @@ git push origin main
 ```
 
 ### 2. Import to Vercel
+
 1. Go to [vercel.com](https://vercel.com)
 2. Import your GitHub repository
 3. Add environment variables:
@@ -183,10 +190,13 @@ git push origin main
    - `NEXTAUTH_URL` - Your Vercel URL (e.g., `https://truthlens.vercel.app`)
 
 ### 3. Deploy
+
 Vercel will automatically build and deploy your app.
 
 ### 4. Initialize Database
+
 After first deployment, run:
+
 ```bash
 npx prisma db push
 ```
@@ -203,11 +213,11 @@ Click any demo card to see how results are displayed. This is useful for testing
 
 ## Environment Variables
 
-| Variable | Description | Required |
-|---------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `NEXTAUTH_SECRET` | Secret for NextAuth (generate with openssl) | Yes |
-| `NEXTAUTH_URL` | Your app URL (localhost for dev) | Yes |
+| Variable          | Description                                 | Required |
+| ----------------- | ------------------------------------------- | -------- |
+| `DATABASE_URL`    | PostgreSQL connection string                | Yes      |
+| `NEXTAUTH_SECRET` | Secret for NextAuth (generate with openssl) | Yes      |
+| `NEXTAUTH_URL`    | Your app URL (localhost for dev)            | Yes      |
 
 ## Contributing
 

@@ -27,7 +27,6 @@ import { useTheme } from "next-themes";
 import BiasMeter from "../components/BiasMeter";
 import VerificationChart from "../components/VerificationCharts";
 import ExampleQueryCards from "../components/ExampleQueryCards";
-import TestDemoCards from "../components/TestDemoCards";
 import TrendChart from "../components/TrendChart";
 
 interface TempHistoryItem {
