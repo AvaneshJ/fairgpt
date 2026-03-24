@@ -6,7 +6,7 @@
 
 ## 📸 Preview
 
-![TruthLens UI](./public/photo.jpeg)
+![TruthLens UI](./public/ss.jpeg)
 
 ---
 
