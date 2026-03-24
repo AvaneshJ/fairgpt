@@ -25,12 +25,6 @@ const EXAMPLES = [
       "Verify MP government's mandatory PNG surrendering rule for LPG users",
     icon: "🏛️",
   },
-  {
-    title: "Health & Safety",
-    query:
-      "Is the Ministry of Health mandating a mask rule for the 2026 festival season?",
-    icon: "🏥",
-  },
 ];
 
 export default function ExampleQueryCards({
