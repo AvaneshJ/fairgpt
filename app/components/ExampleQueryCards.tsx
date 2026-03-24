@@ -31,12 +31,6 @@ const EXAMPLES = [
       "Is the Ministry of Health mandating a mask rule for the 2026 festival season?",
     icon: "🏥",
   },
-  {
-    title: "Campus Pulse",
-    query:
-      "Fact-check: VIT Bhopal's transition to a fully 4-day work week for students",
-    icon: "🎓",
-  },
 ];
 
 export default function ExampleQueryCards({
