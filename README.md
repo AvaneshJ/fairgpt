@@ -1,6 +1,3 @@
-Say less 😄 — **one block, clean, final boss README**. Copy → paste → push → enjoy the “who wrote this?” respect.
-
-````markdown
 # TruthLens
 
 **AI-powered news verification platform** that combats misinformation by auditing claims and media against trusted sources, detecting bias, and revealing the underlying truth.
