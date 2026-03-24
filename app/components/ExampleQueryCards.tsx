@@ -8,19 +8,34 @@ interface ExampleQueryCardsProps {
 
 const EXAMPLES = [
   {
-    title: "Government Schemes",
-    query: "Is the VB-G RAM G scheme officially replacing MGNREGA?",
+    title: "Energy & Supply",
+    query:
+      "Verify petrol shortage rumors in MP and the new 45-day LPG booking rule 2026",
+    icon: "⛽",
+  },
+  {
+    title: "Digital Finance",
+    query:
+      "Is the 1.1% transaction fee on UPI payments above ₹2000 officially active?",
+    icon: "💳",
+  },
+  {
+    title: "State Policy",
+    query:
+      "Verify MP government's mandatory PNG surrendering rule for LPG users",
     icon: "🏛️",
   },
   {
-    title: "Viral Rumors",
-    query: "Fact check: New 500 rupee note with star symbol fake?",
-    icon: "🔍",
+    title: "Health & Safety",
+    query:
+      "Is the Ministry of Health mandating a mask rule for the 2026 festival season?",
+    icon: "🏥",
   },
   {
-    title: "Economy & Tax",
-    query: "Latest updates on UPI transaction tax implementation 2026",
-    icon: "📈",
+    title: "Campus Pulse",
+    query:
+      "Fact-check: VIT Bhopal's transition to a fully 4-day work week for students",
+    icon: "🎓",
   },
 ];
 
