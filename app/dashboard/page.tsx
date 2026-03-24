@@ -22,6 +22,7 @@ import {
   FileText,
   BookmarkCheck,
   Download,
+  Menu,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import BiasMeter from "../components/BiasMeter";
@@ -80,6 +81,9 @@ export default function TruthLensDashboard() {
   // Chat UI States
   const [activeQuery, setActiveQuery] = useState("");
   const [activePreviewUrl, setActivePreviewUrl] = useState<string | null>(null);
+
+  // Mobile Menu State
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Fallback API URL so Vercel doesn't crash if env vars fail
   const API_BASE_URL =
@@ -305,32 +309,34 @@ export default function TruthLensDashboard() {
           >
             <History size={16} className="text-slate-400" />
           </Link>
-          {session?.user ? (
-            <>
+          
+          {/* Desktop Auth Buttons */}
+          <div className="hidden sm:flex items-center gap-2">
+            {session?.user ? (
               <button
                 onClick={() => signOut({ callbackUrl: "/dashboard" })}
-                className="p-2 sm:p-3 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-transform hover:scale-105 text-slate-400 hover:text-red-500"
+                className="p-3 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-transform hover:scale-105 text-slate-400 hover:text-red-500"
               >
-                <LogOut className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                <LogOut className="w-4.5 h-4.5" />
               </button>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="px-2 sm:px-4 py-2 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl shadow-sm text-xs sm:text-sm font-medium hover:border-blue-500 transition-all"
-              >
-                <span className="hidden xs:inline">Login</span>
-                <span className="xs:hidden">Log</span>
-              </Link>
-              <Link
-                href="/signup"
-                className="px-2 sm:px-4 py-2 bg-blue-600 text-white rounded-xl shadow-sm text-xs sm:text-sm font-bold hover:bg-blue-700 transition-all"
-              >
-                Sign Up
-              </Link>
-            </>
-          )}
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl shadow-sm text-sm font-medium hover:border-blue-500 transition-all"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-xl shadow-sm text-sm font-bold hover:bg-blue-700 transition-all"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="p-2 sm:p-3 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm transition-transform hover:scale-105"
@@ -341,6 +347,54 @@ export default function TruthLensDashboard() {
               <Moon className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-blue-600" />
             )}
           </button>
+
+          {/* Mobile Hamburger Menu */}
+          <div className="relative sm:hidden">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-xl bg-white dark:bg-slate-800 border dark:border-slate-700 shadow-sm"
+            >
+              {mobileMenuOpen ? (
+                <X size={20} className="text-slate-600 dark:text-slate-300" />
+              ) : (
+                <Menu size={20} className="text-slate-600 dark:text-slate-300" />
+              )}
+            </button>
+            
+            {mobileMenuOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2">
+                {session?.user ? (
+                  <button
+                    onClick={() => {
+                      signOut({ callbackUrl: "/dashboard" });
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 text-left text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                ) : (
+                  <div className="flex">
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex-1 px-4 py-3 text-center text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 border-r border-slate-200 dark:border-slate-700"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      href="/signup"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex-1 px-4 py-3 text-center text-sm font-bold text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-700"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
